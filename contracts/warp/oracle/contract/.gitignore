@@ -1,3 +1,5 @@
 arwallet.json
 dist
+logs
 node_modules
+cache
