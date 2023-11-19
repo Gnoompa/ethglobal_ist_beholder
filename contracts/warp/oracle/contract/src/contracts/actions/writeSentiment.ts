@@ -1,6 +1,13 @@
 import { SmartWeaveGlobal } from "warp-contracts";
 import { IState, IWriteSentimentInput } from "../../../types";
 
+// Sentiments are to be inserted into Sparse Merkle Tree for fast non-inclusion checks and onchain use (if not in the tree - entity has no sentiments yet)
+/**
+ SMT {
+    key = H(entityId, sentimentCounter, cumulativeSentimentWeight)
+    value = int4(sentimentScore) + MR(sentimentSenderAddress)
+}
+ */
 export const writeSentiment = async (state: IState, { caller, input }) => {
   // @ts-ignore
   let GlobalSmartWeave = SmartWeave as SmartWeaveGlobal;
@@ -13,7 +20,6 @@ export const writeSentiment = async (state: IState, { caller, input }) => {
       !inputSentiment.entityID ||
       inputSentiment.legitimacyProofs.length == 0 ||
       inputSentiment.score === undefined
-
     ) {
       throw new Error("invalid input");
     }

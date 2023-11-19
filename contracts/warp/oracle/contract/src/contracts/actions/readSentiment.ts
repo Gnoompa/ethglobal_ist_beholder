@@ -5,9 +5,11 @@ export const readSentiment = async (
   state: IState,
   {
     input: {
-      entityID,
-      sentimentCountThreshold,
-      sentimentCumulativeWeightThreshold,
+      data: {
+        entityID,
+        sentimentCountThreshold,
+        sentimentCumulativeWeightThreshold,
+      },
     },
   }
 ) => {
@@ -16,16 +18,15 @@ export const readSentiment = async (
 
   const sentimentScore = undefined;
 
+  const entityIDHash = Array.from(
+    await GlobalSmartWeave.arweave.crypto.hash(
+      GlobalSmartWeave.arweave.utils.stringToBuffer(entityID)
+    )
+  )
+    .map((item) => item.toString(16).padStart(2, "0"))
+    .join("");
+
   return {
-    result:
-      state.sentiments[
-        Array.from(
-          await GlobalSmartWeave.arweave.crypto.hash(
-            GlobalSmartWeave.arweave.utils.stringToBuffer(entityID)
-          )
-        )
-          .map((item) => item.toString(16).padStart(2, "0"))
-          .join("")
-      ],
+    result: state.sentiments[entityIDHash] || 0,
   };
 };

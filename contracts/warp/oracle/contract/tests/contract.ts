@@ -68,7 +68,13 @@ async function main() {
     } as IWriteSentimentInput),
   });
 
-  console.log((await oracle.readState()).cachedValue.state.sentiments);
+  // console.log((await oracle.readState()).cachedValue.state.sentiments);
+  console.log(
+    await oracle.viewState({
+      function: "readSentiment",
+      data: { entityID: "test1" },
+    })
+  );
 
   // expect(contractTx).not.toBeNull();
   // });
