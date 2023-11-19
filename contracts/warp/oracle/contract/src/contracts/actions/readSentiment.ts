@@ -1,6 +1,7 @@
+import { SmartWeaveGlobal } from "warp-contracts";
 import { IState } from "../../../types";
 
-export const readSentiment = (
+export const readSentiment = async (
   state: IState,
   {
     input: {
@@ -10,7 +11,21 @@ export const readSentiment = (
     },
   }
 ) => {
+  // @ts-ignore
+  let GlobalSmartWeave = SmartWeave as SmartWeaveGlobal;
+
   const sentimentScore = undefined;
 
-  return { result: sentimentScore };
+  return {
+    result:
+      state.sentiments[
+        Array.from(
+          await GlobalSmartWeave.arweave.crypto.hash(
+            GlobalSmartWeave.arweave.utils.stringToBuffer(entityID)
+          )
+        )
+          .map((item) => item.toString(16).padStart(2, "0"))
+          .join("")
+      ],
+  };
 };

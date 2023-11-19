@@ -5,7 +5,7 @@ import { Contract, Warp, WarpFactory } from "warp-contracts";
 import { DeployPlugin } from "warp-contracts-plugin-deploy";
 // import wallet from "../arwallet.json";
 import { initialState as originInitialState } from "../oracle";
-import { IState } from "../types";
+import { IState, IWriteSentimentInput } from "../types";
 
 async function main() {
   let initialState = {
@@ -55,7 +55,22 @@ async function main() {
 
   console.log("contractData", contractTx);
 
-  //   expect(contractTx).not.toBeNull();
+  await oracle.writeInteraction({
+    function: "writeSentiment",
+    content: JSON.stringify({
+      entityID: "test",
+      score: 1,
+      legitimacyProofs: [
+        {
+          vendor: "lens",
+        },
+      ],
+    } as IWriteSentimentInput),
+  });
+
+  console.log((await oracle.readState()).cachedValue.state.sentiments);
+
+  // expect(contractTx).not.toBeNull();
   // });
 
   // it("should read state", async () => {

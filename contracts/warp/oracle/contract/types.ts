@@ -35,6 +35,7 @@ export interface IWriteSentimentInput {
   timestamp: number;
   legitimacyProofs: {
     type: "merkle" | "zk";
+    vendor: string;
     chainId?: number;
     blockNumber?: number;
     proof: string;
