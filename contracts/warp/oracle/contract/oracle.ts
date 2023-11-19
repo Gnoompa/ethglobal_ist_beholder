@@ -5,6 +5,7 @@ export const initialState = {
   sentimentSettings: {
     maxScore: 10,
     legitimacyProofWeight: {
+      ens: 5,
       lens: 5,
       worldid: 10,
     },
