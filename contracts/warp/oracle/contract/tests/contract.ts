@@ -20,6 +20,7 @@ async function main() {
   let owner;
 
   let contractId: string;
+  contractId = "pn35zq0NUEJU9gss-9XEv0Z5LL8vkpMtzlpy61rpD3Q";
   let contractSrc: string;
 
   // beforeAll(async () => {
@@ -28,12 +29,11 @@ async function main() {
   //   oracle = warp.contract<IState>(contractId).connect(wallet);
   // });
 
-  arlocal = new ArLocal(1820, false);
-  await arlocal.start();
+  // arlocal = new ArLocal(1820, false);
+  // await arlocal.start();
 
-  warp = WarpFactory.forLocal(1820).use(new DeployPlugin());
-
-  // warp = WarpFactory.forLocal().use(new DeployPlugin());
+  // warp = WarpFactory.forLocal(1820).use(new DeployPlugin());
+  warp = WarpFactory.forTestnet().use(new DeployPlugin());
 
   contractSrc = fs.readFileSync(
     path.join(__dirname, "../dist/oracle.js"),
@@ -42,11 +42,11 @@ async function main() {
 
   ({ jwk: wallet, address: owner } = await warp.generateWallet());
 
-  ({ contractTxId: contractId } = await warp.deploy({
-    wallet,
-    initState: JSON.stringify(initialState),
-    src: contractSrc,
-  }));
+  // ({ contractTxId: contractId } = await warp.deploy({
+  //   wallet,
+  //   initState: JSON.stringify(initialState),
+  //   src: contractSrc,
+  // }));
   console.log("Deployed contract: ", contractId);
   oracle = warp.contract<IState>(contractId).connect(wallet);
 
